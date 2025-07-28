@@ -1,14 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
-import list from "../../public/list.json"
 import Card from './Card'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 
 function Course() {
 
-  const filteredCourses = list.filter((course) => course.category === "Paid");
+ const[book,setBook] = useState([]);
+
+ useEffect(() => {
+  const getBook = async () => {
+    try {
+      const res=await axios.get("http://localhost:4001/book"); 
+      console.log(res.data);
+      setBook(res.data);
+      
+    } catch (error) {
+      console.log( error);
+    }
+  }
+  getBook();
+  },[]);
+
   return (
     <>
 
@@ -34,7 +49,7 @@ function Course() {
        
        <div className="mx-auto ">    
        <div className=" ml-10 mr-10 grid grid-cols-1 md:grid-cols-4 gap-10 mx-auto  ">  
-            {filteredCourses.map((course)=>( <Card item={course} key={course.id} />))}
+            {book.map((course)=>( <Card item={course} key={course.id} />))}
        </div>
        </div>  
 
